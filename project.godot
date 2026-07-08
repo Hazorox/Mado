@@ -10,18 +10,31 @@ config_version=5
 
 [application]
 
-config/name="Kado"
+config/name="Mado"
+config/description="Stop procrastinating before sunrise!"
+config/version="1.0.0"
+run/main_scene="uid://ci6tfroobdku7"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://assets/icon.png"
 
 [display]
 
-window/stretch/mode="canvas_items"
+window/size/viewport_width=1440
+window/size/viewport_height=810
+window/size/resizable=false
+window/size/borderless=true
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+window/canvas_textures/default_texture_filter=1
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
+
+[gui]
+
+theme/custom_font="uid://bfi62fjvwxfck"
 
 [physics]
 
@@ -29,4 +42,5 @@ enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
