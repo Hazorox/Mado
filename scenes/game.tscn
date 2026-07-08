@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b2o1aknxsf8om"]
+
+[ext_resource type="Texture2D" uid="uid://ibrn1pobef55" path="res://assets/bg.png" id="1_uwrxv"]
+
+[node name="Game" type="Node2D" unique_id=1127610147]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2039854716]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1315614302]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_uwrxv")
