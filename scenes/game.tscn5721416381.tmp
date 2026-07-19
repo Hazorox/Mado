@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://diuthx2ko4l0t" path="res://assets/character/Yellow/idle.png" id="5_kvpfn"]
 [ext_resource type="Texture2D" uid="uid://cne3q3t0vcnat" path="res://assets/character/Default/walk.png" id="6_dinhu"]
 [ext_resource type="Script" uid="uid://y4dsevuvsmdh" path="res://scripts/interactable.gd" id="8_gee14"]
-[ext_resource type="PackedScene" uid="uid://djneg3xpekyaa" path="res://scenes/dialogue.tscn" id="9_0tnpc"]
 
 [sub_resource type="GDScript" id="GDScript_0hvcy"]
 script/source = "extends CharacterBody2D
@@ -17,7 +16,7 @@ script/source = "extends CharacterBody2D
 const SPEED = 350.0
 @onready var anim_sprite: AnimatedSprite2D = $player
 
-func _physics_process(_delta:float) -> void:
+func _physics_process(delta:float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var directionX := Input.get_axis(\"ui_left\", \"ui_right\")
@@ -384,6 +383,9 @@ animations = [{
 "speed": 3.5
 }]
 
+[sub_resource type="GDScript" id="GDScript_u5sy4"]
+resource_name = "playerScript"
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nfrx5"]
 radius = 146.92957
 height = 463.97406
@@ -391,24 +393,6 @@ height = 463.97406
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0tnpc"]
 radius = 53.0
 height = 230.69922
-
-[sub_resource type="GDScript" id="GDScript_0tnpc"]
-script/source = "extends CanvasLayer
-@onready var colorRect:ColorRect = $fadeRect
-@onready var player = $\"../body/player\"
-func fade_in_out() -> void:
-	colorRect.color.a = 0
-	var tween_in: Tween = get_tree().create_tween()
-	tween_in.tween_property(colorRect, \"color:a\", 1, 1)
-
-	await get_tree().create_timer(2).timeout
-
-	var tween_out: Tween = get_tree().create_tween()
-	tween_out.tween_property(colorRect, \"color:a\", 0, 1)
-	await tween_out.finished
-"
-
-[sub_resource type="Theme" id="Theme_nfrx5"]
 
 [node name="Game" type="Node2D" unique_id=1127610147]
 
@@ -424,31 +408,30 @@ position = Vector2(272, 501)
 build_mode = 1
 polygon = PackedVector2Array(14, 0, 656, 5, 698, 97, 1044, 91, 1139, 312, -267, 309, -210, 205, -91, 205)
 
-[node name="body" type="CharacterBody2D" parent="." unique_id=1427137130]
-collision_layer = 3
-collision_mask = 3
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1427137130]
 script = SubResource("GDScript_0hvcy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="body" unique_id=1429418552]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1429418552]
 position = Vector2(721, 626)
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("CircleShape2D_nfrx5")
 
-[node name="player" type="AnimatedSprite2D" parent="body" unique_id=1651552886]
+[node name="player" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1651552886]
 position = Vector2(721, 587)
 scale = Vector2(10, 10)
 sprite_frames = SubResource("SpriteFrames_nfrx5")
-animation = &"walk_up"
+animation = &"idleNormal"
+script = SubResource("GDScript_u5sy4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=60356803]
 anchor_mode = 0
 
 [node name="PC" type="Area2D" parent="." unique_id=1354635164]
 visibility_layer = 2
-collision_layer = 2
-collision_mask = 2
 script = ExtResource("8_gee14")
-action = "PC"
+obj_name = null
+interact_text = null
+interaction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PC" unique_id=183183715]
 visibility_layer = 2
@@ -458,10 +441,10 @@ shape = SubResource("CapsuleShape2D_nfrx5")
 
 [node name="wall" type="Area2D" parent="." unique_id=734805292]
 visibility_layer = 2
-collision_layer = 2
-collision_mask = 2
 script = ExtResource("8_gee14")
-action = "wall"
+obj_name = null
+interact_text = null
+interaction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall" unique_id=67452870]
 visibility_layer = 2
@@ -471,10 +454,10 @@ shape = SubResource("CapsuleShape2D_nfrx5")
 
 [node name="bed" type="Area2D" parent="." unique_id=631237320]
 visibility_layer = 2
-collision_layer = 2
-collision_mask = 2
 script = ExtResource("8_gee14")
-action = "bed"
+obj_name = null
+interact_text = null
+interaction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="bed" unique_id=202906946]
 visibility_layer = 2
@@ -484,25 +467,13 @@ shape = SubResource("CapsuleShape2D_nfrx5")
 
 [node name="window" type="Area2D" parent="." unique_id=514937579]
 visibility_layer = 2
-collision_layer = 2
-collision_mask = 2
 script = ExtResource("8_gee14")
-action = "window"
+obj_name = null
+interact_text = null
+interaction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="window" unique_id=1245913097]
 visibility_layer = 2
 position = Vector2(1361.0001, 698.99994)
 rotation = -0.51985884
 shape = SubResource("CapsuleShape2D_0tnpc")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=845473380]
-script = SubResource("GDScript_0tnpc")
-
-[node name="Dialogue" parent="CanvasLayer" unique_id=2135844690 instance=ExtResource("9_0tnpc")]
-
-[node name="fadeRect" type="ColorRect" parent="CanvasLayer" unique_id=2082704564]
-custom_minimum_size = Vector2(1440, 810)
-offset_right = 1440.0
-offset_bottom = 810.0
-theme = SubResource("Theme_nfrx5")
-color = Color(0, 0, 0, 0)
