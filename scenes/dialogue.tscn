@@ -11,6 +11,8 @@ script/source = "extends Control
 @onready var currentLine = 0
 @onready var txtLines:Array = []
 @onready var choices = []
+signal choice_made(index:int)
+var selected_choice := 0
 var choosing:=false
 var just_opened := false
 signal dialogue_closed
@@ -33,34 +35,52 @@ func _process(_delta:float)->void:
 	if just_opened:
 		just_opened = false
 		return
+	
+	if choosing:
+		if Input.is_action_just_pressed(\"ui_left\") or Input.is_action_just_pressed(\"ui_right\"):
+			selected_choice = 1 - selected_choice
+			choose_color()
+		elif Input.is_action_just_pressed(\"interact\"):
+			choice_made.emit(selected_choice)
+		return
 
-	if Input.is_action_just_pressed(\"interact\") and choosing==false:
-		if(currentLine >= txtLines.size()-1):
+	if Input.is_action_just_pressed(\"interact\"):
+		if currentLine >= txtLines.size() - 1:
 			hide_dialogue()
-			currentLine=0
-			txtLines=[]
+			currentLine = 0
+			txtLines = []
 		else:
-			currentLine+=1
-			text.text=txtLines[currentLine]
+			currentLine += 1
+			text.text = txtLines[currentLine]
 
 func hide_dialogue()->void:
 	get_tree().paused=false
 	hide()
 	dialogue_closed.emit()
-func interact(choices:Array)->int:
-	choosing=true
-	get_tree().paused=true
+
+func interact(choicesArr:Array) -> int:
+	choosing = true
+	selected_choice = 0
+	choice1.text=choicesArr[0]
+	choice2.text=choicesArr[1]
+	get_tree().paused = true
 	show()
 	text.hide()
 	user.hide()
 	choicesControl.show()
-	
-	
-	
+	just_opened = true
+	choose_color()
+
+	var result = await choice_made
+
 	choicesControl.hide()
-	choosing=false
-	hide()
-	return 0
+	choosing = false
+	hide_dialogue()
+	return result
+
+func choose_color() -> void:
+	choice1.add_theme_color_override(\"font_color\", Color.YELLOW if selected_choice == 0 else Color.WHITE)
+	choice2.add_theme_color_override(\"font_color\", Color.YELLOW if selected_choice == 1 else Color.WHITE)
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vogiq"]
@@ -151,3 +171,5 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_font_sizes/font_size = 64
 text = "Option 2"
+
+[node name="select" type="AudioStreamPlayer" parent="." unique_id=989761844]
