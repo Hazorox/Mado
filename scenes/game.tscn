@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://di2ltpekdk8ye" path="res://assets/character/Blue/idle.png" id="1_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://yfw41yf2e8vs" path="res://assets/bg.png" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://dy6u20knddr6c" path="res://scripts/game.gd" id="1_vtaks"]
 [ext_resource type="Texture2D" uid="uid://gtqvx3p2jgp4" path="res://assets/character/Green/idle.png" id="2_gee14"]
 [ext_resource type="Texture2D" uid="uid://cwhooo8eispfy" path="res://assets/character/Default/idle.png" id="3_0tnpc"]
 [ext_resource type="Texture2D" uid="uid://jrne7hgtmghn" path="res://assets/character/Red/idle.png" id="4_vtaks"]
@@ -9,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cne3q3t0vcnat" path="res://assets/character/Default/walk.png" id="6_dinhu"]
 [ext_resource type="Script" uid="uid://y4dsevuvsmdh" path="res://scripts/interactable.gd" id="8_gee14"]
 [ext_resource type="PackedScene" uid="uid://djneg3xpekyaa" path="res://scenes/dialogue.tscn" id="9_0tnpc"]
+[ext_resource type="AudioStream" uid="uid://cminygy5ij6e4" path="res://assets/danger.mp3" id="11_kvpfn"]
 
 [sub_resource type="GDScript" id="GDScript_0hvcy"]
 script/source = "extends CharacterBody2D
@@ -396,21 +398,39 @@ height = 230.69922
 script/source = "extends CanvasLayer
 @onready var colorRect:ColorRect = $fadeRect
 @onready var player = $\"../body/player\"
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 func fade_in_out() -> void:
+	get_tree().paused=true
 	colorRect.color.a = 0
 	var tween_in: Tween = get_tree().create_tween()
+	tween_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween_in.tween_property(colorRect, \"color:a\", 1, 1)
-
-	await get_tree().create_timer(2).timeout
-
+	await get_tree().create_timer(2, true).timeout
 	var tween_out: Tween = get_tree().create_tween()
+	tween_out.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween_out.tween_property(colorRect, \"color:a\", 0, 1)
 	await tween_out.finished
+	get_tree().paused=false
 "
 
 [sub_resource type="Theme" id="Theme_nfrx5"]
 
+[sub_resource type="GDScript" id="GDScript_nfrx5"]
+script/source = "extends Label
+
+
+func _ready() -> void:
+	text = \"Night : {0}\".format([Game.night])
+
+
+func _process(delta: float) -> void:
+	text = \"Night : {0}\".format([Game.night])
+	
+"
+
 [node name="Game" type="Node2D" unique_id=1127610147]
+script = ExtResource("1_vtaks")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1315614302]
 offset_right = 1440.0
@@ -506,3 +526,12 @@ offset_right = 1440.0
 offset_bottom = 810.0
 theme = SubResource("Theme_nfrx5")
 color = Color(0, 0, 0, 0)
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=638810681]
+offset_right = 227.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 32
+script = SubResource("GDScript_nfrx5")
+
+[node name="danger" type="AudioStreamPlayer" parent="." unique_id=340566670]
+stream = ExtResource("11_kvpfn")
