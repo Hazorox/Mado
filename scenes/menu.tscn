@@ -6,6 +6,22 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tr8j5"]
 texture = ExtResource("1_yqeox")
 
+[sub_resource type="GDScript" id="GDScript_kvpfn"]
+resource_name = "menu navigation"
+script/source = "extends VBoxContainer
+@onready var option1 := $Start
+@onready var option2 := $Exit
+@onready var selected_choice = 0
+@onready var options = [option1,option2]
+func _ready()->void:
+	option1.grab_focus()
+func _process(_detla:float)->void:
+	if Input.is_action_just_pressed(\"ui_up\") or Input.is_action_just_pressed(\"ui_down\"):
+		selected_choice = 1-selected_choice
+		options[selected_choice].grab_focus()
+	
+"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2nlq"]
 bg_color = Color(0, 0, 0, 0.39607844)
 corner_radius_top_left = 16
@@ -59,7 +75,8 @@ func _process(delta: float) -> void:
 
 
 func _on_pressed() -> void:
-	get_tree().change_scene_to_file(\"res://scenes/game.tscn\")"
+	get_tree().change_scene_to_file(\"res://scenes/game.tscn\")
+"
 
 [sub_resource type="GDScript" id="GDScript_0hvcy"]
 resource_name = "game exit"
@@ -106,8 +123,10 @@ offset_left = 509.0
 offset_top = 542.0
 offset_right = 908.0
 offset_bottom = 713.0
+focus_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
+script = SubResource("GDScript_kvpfn")
 
 [node name="Start" type="Button" parent="Buttons" unique_id=1238809717]
 layout_mode = 2
