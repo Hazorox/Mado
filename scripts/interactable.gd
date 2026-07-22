@@ -23,20 +23,15 @@ func interact()->void:
 			if Game.pc_opened==false:
 				await dialogue.show_dialogue(["It's your computer...","You Open your mail for notifications"])
 				danger_audio.play()
-				await dialogue.show_dialogue(["[!!!] FINAL PROJECT : Due in {0} Days".format([3-Game.night])])
+				await dialogue.show_dialogue(["[!!!] FINAL PROJECT : Due in {0} Days".format([4-Game.night])])
 				Game.pc_opened=true
 			else:
-				if Game.worked_night==0:
-					await dialogue.show_dialogue(["[Discord DM] : Yo Hop on rq we will start.","Where are you????"])
-					var idk_choice = await dialogue.interact(["Hop On","Work for the Night"])
-					if idk_choice == 0:
-						await dialogue.show_dialogue(["You Play for the entire night without a sense of time..."])
-						advance_night()
-						Game.night+=1
-					if idk_choice == 1:
-						await dialogue.show_dialogue(["You make big progress on the project"])
-						advance_night()
-						Game.night+=1
+				if Game.night==1:
+					pc_choice(["[Discord DM] : Yo Hop on rq we will start.","Where are you????"],["Hop On","Work for the Night"],"You spend all night playing recklessly","You work for the night...")
+				elif Game.night==2:
+					pc_choice(["[NEW NOTIFICATION]: You were mentioned in a post online"],["Check","Ignore and open Project"],"You Opened...It was a meme that you saw 10 times before\nYou scroll mindlessly...","You ignore and continue working on the project")
+				elif Game.night==3:
+					pc_choice(["[EMAIL]: A game on your wishlist is now on sale!!!"],["Buy Game","Work & Buy Later"],"You buy the game...\nIt's pretty cool... You spend the night playing...","You Ignore and finish your project and submit :D")
 		"window":
 			await dialogue.show_dialogue(["The Sky is Clear... The Stars are Sparkling\nYou're filled with INSPIRATION"])
 			if(Game.pc_opened==true):
@@ -60,3 +55,30 @@ func interact()->void:
 			dialogue.show_dialogue(["Some of your interests framed on a wall...\nNothing Happens..."])
 func advance_night()->void:
 	await canvasLayer.fade_in_out()
+
+func pc_choice(text,choices,choice1Result,choice2Result)->void:
+	await dialogue.show_dialogue(text)
+	var choice = await dialogue.interact(choices)
+	if choice==0:
+		await dialogue.show_dialogue([choice1Result])
+		Game.night+=1
+		await advance_night()
+	else:
+		await dialogue.show_dialogue([choice2Result])
+		Game.night+=1
+		Game.worked_night+=1
+		await advance_night()
+
+
+
+#await dialogue.show_dialogue()
+					#var idk_choice = await dialogue.interact(["Hop On","Work for the Night"])
+					#if idk_choice == 0:
+						#await dialogue.show_dialogue(["You Play for the entire night without a sense of time..."])
+						#advance_night()
+						#Game.night+=1
+					#if idk_choice == 1:
+						#await dialogue.show_dialogue(["You make big progress on the project"])
+						#Game.worked_night+=1
+						#advance_night()
+						#Game.night+=1
