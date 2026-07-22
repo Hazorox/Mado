@@ -36,6 +36,10 @@ window/canvas_textures/default_texture_filter=1
 
 enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
+[global_group]
+
+Dialogue=""
+
 [gui]
 
 theme/custom_font="uid://dhrimayuqkyh8"

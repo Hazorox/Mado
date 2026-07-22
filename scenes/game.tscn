@@ -518,7 +518,7 @@ shape = SubResource("CapsuleShape2D_0tnpc")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=845473380]
 script = SubResource("GDScript_0tnpc")
 
-[node name="Dialogue" parent="CanvasLayer" unique_id=2135844690 instance=ExtResource("9_0tnpc")]
+[node name="Dialogue" parent="CanvasLayer" unique_id=2135844690 groups=["Dialogue"] instance=ExtResource("9_0tnpc")]
 
 [node name="fadeRect" type="ColorRect" parent="CanvasLayer" unique_id=2082704564]
 custom_minimum_size = Vector2(1440, 810)
