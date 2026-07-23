@@ -8,6 +8,7 @@ extends Control
 @onready var currentLine = 0
 @onready var txtLines:Array = []
 @onready var choices = []
+@onready var select := $select
 signal choice_made(index:int)
 var selected_choice := 0
 var choosing:=false
@@ -15,6 +16,7 @@ var just_opened := false
 signal dialogue_closed
 func _ready() -> void:
 	Game.dialogue = self
+	select.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	hide()
 
@@ -38,8 +40,10 @@ func _process(_delta:float)->void:
 		if Input.is_action_just_pressed("ui_left") or Input.is_action_just_pressed("ui_right"):
 			selected_choice = 1 - selected_choice
 			choose_color()
+			select.play()
 		elif Input.is_action_just_pressed("interact"):
 			choice_made.emit(selected_choice)
+			select.play()
 		return
 
 	if Input.is_action_just_pressed("interact"):

@@ -14,13 +14,13 @@ func _process(_delta:float)->void:
 		elif worked_night==2:
 			await dialogue.show_dialogue(["You have finished most of the project, you got B+..."])
 		elif worked_night==1:
-			await dialogue.show_dialogue(["You finished a small part of the project, you deserved a C+ :("])
+			await dialogue.show_dialogue(["You finished a small part of the project, you deserved a Z+ :("])
 		else:
 			await dialogue.show_dialogue(["You failed to work on the project...\nYou believe you will do better next time...","That's what you said last time also...\nAnd the loop continues..."])
 		
-		await dialogue.show_dialogue(["You have finished the game... Self Destruction in 5 seconds"])
-		await get_tree().create_timer(5).timeout
-		night=0
+		await dialogue.show_dialogue(["You have finished the game...","SELF DESTRUCTION SEQUENCE INITIATED!!!"])
+		get_tree().create_timer(5).timeout
+		night=1
 		slept_night=false
 		worked_night=0
 		pc_opened=false

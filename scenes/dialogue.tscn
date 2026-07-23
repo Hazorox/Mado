@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://djneg3xpekyaa"]
 
 [ext_resource type="Script" uid="uid://d0wtx28l3rr4g" path="res://scripts/dialogue.gd" id="1_jwyou"]
+[ext_resource type="AudioStream" uid="uid://dhkmjgj4g712u" path="res://assets/select.mp3" id="2_3n4vj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vogiq"]
 bg_color = Color(0.0018410675, 0.0018410685, 0.0018410663, 1)
@@ -92,3 +93,4 @@ theme_override_font_sizes/font_size = 64
 text = "Option 2"
 
 [node name="select" type="AudioStreamPlayer" parent="." unique_id=989761844]
+stream = ExtResource("2_3n4vj")
